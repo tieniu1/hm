@@ -71,7 +71,7 @@
     data () {
       return {
         user: {
-          mobile: '15322222222',
+          mobile: '17090086870',
           code: '246810'
         },
         formRules: {

@@ -11,8 +11,9 @@
                 slot="icon"
                 round
                 fit="cover"
-                src="https://img.yzcdn.cn/vant/cat.jpeg"/>
-        <div slot="title" class="name">昵称</div>
+                :src="currentUser.photo"
+                 />
+        <div slot="title" class="name">{{currentUser.intro}}</div>
         <van-button
                 class="update-btn"
                 round
@@ -24,25 +25,25 @@
       <van-grid class="data-info" :border="false">
         <van-grid-item class="data-info-item">
           <div slot="text" class="text-wrap">
-            <div class="count">123</div>
+            <div class="count">{{ currentUser.art_count }}</div>
             <div class="text">头条</div>
           </div>
         </van-grid-item>
         <van-grid-item class="data-info-item">
           <div slot="text" class="text-wrap">
-            <div class="count">123</div>
+            <div class="count">{{ currentUser.follow_count }}</div>
             <div class="text">关注</div>
           </div>
         </van-grid-item>
         <van-grid-item class="data-info-item">
           <div slot="text" class="text-wrap">
-            <div class="count">123</div>
+            <div class="count">{{ currentUser.fans_count }}</div>
             <div class="text">粉丝</div>
           </div>
         </van-grid-item>
         <van-grid-item class="data-info-item">
           <div slot="text" class="text-wrap">
-            <div class="count">123</div>
+            <div class="count">{{ currentUser.like_count }}</div>
             <div class="text">获赞</div>
           </div>
         </van-grid-item>
@@ -75,15 +76,27 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex'
   import { Dialog } from 'vant'
+  import { mapState } from 'vuex'
+  import { getCurrentUser } from '../../api/user'
 
   export default {
-    name: 'MyIndex',
+    name: 'MyIndex', data () {
+      return {
+        currentUser: {} // 当前登录用户信息
+      }
+    },
+    created () {
+      this.loadCurrentUser()
+    },
     computed: {
       ...mapState(['user'])//仓库映射到本地
     },
     methods: {
+      async loadCurrentUser () {
+        const { data } = await getCurrentUser()
+        this.currentUser = data.data
+      },
       onLogout () {
         Dialog.confirm({
           title: '退出登录',
